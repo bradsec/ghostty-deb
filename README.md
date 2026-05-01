@@ -8,8 +8,6 @@ The script handles everything: cloning the Ghostty source, detecting and install
 
 - Debian/Ubuntu-based Linux (amd64 or aarch64)
 - A normal user account with `sudo` privileges — do not run as root
-- Internet access (to clone Ghostty and download Zig)
-- `git` and `curl` (installed automatically if missing)
 
 ---
 
