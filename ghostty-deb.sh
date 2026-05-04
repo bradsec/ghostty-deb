@@ -345,7 +345,28 @@ install_latest_deb() {
 
   update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
 
+  write_ghostty_config
+
   "$GHOSTTY_BIN" --version || true
+}
+
+write_ghostty_config() {
+  local config_dir="$HOME/.config/ghostty"
+  local config_file="$config_dir/config"
+  local ssh_line="shell-integration-features = ssh-terminfo,ssh-env"
+
+  mkdir -p "$config_dir"
+
+  if [[ ! -f "$config_file" ]]; then
+    echo "$ssh_line" > "$config_file"
+    echo "==> Created $config_file"
+  elif ! grep -qF "$ssh_line" "$config_file"; then
+    echo "" >> "$config_file"
+    echo "$ssh_line" >> "$config_file"
+    echo "==> Added shell-integration-features to $config_file"
+  else
+    echo "==> $config_file already contains shell-integration-features — skipping."
+  fi
 }
 
 save_original_terminal() {
@@ -577,6 +598,7 @@ case "${1:-}" in
     - Verify the Zig tarball checksum before installing
     - Build Ghostty with -Doptimize=ReleaseFast
     - Package the result as a .deb and install it via apt-get
+    - Write a base ~/.config/ghostty/config if one does not exist
 
 EOF
     confirm
@@ -590,7 +612,7 @@ EOF
   This will:
     - Check for new commits in the Ghostty upstream repo
     - If up to date: exit without any changes
-    - If update available: install/refresh build dependencies, rebuild, and reinstall
+    - If update available: install/refresh build dependencies, rebuild, reinstall, and update config
 
 EOF
     confirm
