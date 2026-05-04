@@ -353,7 +353,7 @@ install_latest_deb() {
 write_ghostty_config() {
   local config_dir="$HOME/.config/ghostty"
   local config_file="$config_dir/config"
-  local ssh_line="shell-integration-features = ssh-terminfo,ssh-env"
+  local ssh_line="shell-integration-features = no-cursor,sudo,ssh-terminfo,ssh-env"
 
   mkdir -p "$config_dir"
 
